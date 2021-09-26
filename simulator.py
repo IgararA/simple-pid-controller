@@ -12,7 +12,9 @@ def motor(*arg):
     该执行器为一个直流减速电机，PWM12位分辨率(4096级)  
     经过PID控制器后得到一个PWM占空比参数，假设输入与输出存在一定的线性关系
     """    
-    return 0.4 * arg[0]
+    input = arg[0] if arg[0] < 4096 else 4096
+
+    return input 
 
 
 class Simulator():
@@ -34,7 +36,7 @@ class Simulator():
         self.input = input
         self.desired_value = desired_value
         self.iterations = iterations
-        self.noise = (0, 0) if not noise_flag else noise if noise != None else (0, self.desired_value * 0.03)
+        self.noise = (0, 0) if not noise_flag else noise if noise != None else (0, self.desired_value * 0.01)
         self.coefficient = coefficient
         self.emergence = self.coefficient * self.desired_value if emergence else 0
         self.emergence_list = [random.randint(0, int(iterations * 0.8)) for i in range(emergence_times)]  #iterations * 0.8是为了避免出现过后的突发事件
@@ -77,8 +79,8 @@ class Simulator():
         self.line = plt.plot(0, 0, "red")[0]
         self.current_value_line = plt.plot(0, 0, "blue")[0]
         self.ax = plt.gca() 
-        self.N_text = plt.text(0.9, 0.9, "N=0", horizontalalignment="right", verticalalignment="top", transform=self.ax.transAxes, fontsize=12) #固定文本框
-        self.output_text = plt.text(0.9, 0.85, "output={:.3f}".format(self.pid_y_list[0]), horizontalalignment="right", verticalalignment="top", transform=self.ax.transAxes, fontsize=12)
+        self.N_text = plt.text(0.95, 0.95, "N=0", horizontalalignment="right", verticalalignment="top", transform=self.ax.transAxes, fontsize=12) #固定文本框
+        self.output_text = plt.text(0.95, 0.9, "output={:.3f}".format(self.pid_y_list[0]), horizontalalignment="right", verticalalignment="top", transform=self.ax.transAxes, fontsize=12)
 
     def _update(self, num):
         """

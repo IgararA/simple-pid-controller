@@ -1,5 +1,3 @@
-# from collections import namedtuple
-# from math import exp
 from matplotlib import pyplot as plt
 import numpy as np
 import time
